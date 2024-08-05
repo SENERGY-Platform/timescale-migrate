@@ -91,7 +91,7 @@ func (l *Lib) copyTableDataWorker(id int, workQueue <-chan tableSchemaName) {
 		}
 		rows.Close()
 		cmd := "psql " + l.sourcePsqlConnStr + " -c \"\\COPY (SELECT * FROM " + tableS + ") TO stdout DELIMITER ',' CSV\" | " + "psql " + l.targetPsqlConnStr + " -c \"\\COPY " + tableS + " FROM stdin CSV\""
-		ex := exec.Command("bash", "-c", cmd)
+		ex := exec.Command("sh", "-c", cmd)
 		output, err := ex.Output()
 		if err != nil {
 			panic(err)

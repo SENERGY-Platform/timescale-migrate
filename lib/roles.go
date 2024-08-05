@@ -27,7 +27,7 @@ func (l *Lib) migrateRoles() error {
 
 	log.Println("dumping roles from source")
 	cmd := "pg_dumpall -d " + l.sourcePsqlConnStr + " -l " + l.sourceConfig.PostgresDb + " --quote-all-identifiers --roles-only --file=roles.sql"
-	ex := exec.Command("bash", "-c", cmd)
+	ex := exec.Command("sh", "-c", cmd)
 	output, err := ex.Output()
 	if err != nil {
 		return err
@@ -38,7 +38,7 @@ func (l *Lib) migrateRoles() error {
 
 	log.Println("restoring roles to target")
 	cmd = "psql " + l.targetPsqlConnStr + " --file=roles.sql"
-	ex = exec.Command("bash", "-c", cmd)
+	ex = exec.Command("sh", "-c", cmd)
 	output, err = ex.Output()
 	if err != nil {
 		return err

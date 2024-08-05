@@ -38,7 +38,7 @@ func (l *Lib) migrateSchema(section string, skipDump bool) error {
 	if !skipDump {
 		log.Println("dumping schema " + section + ", this might take a while...")
 		cmd := "pg_dump " + l.sourcePsqlConnStr + " -Fc -v --section=" + section + " --exclude-schema=\"_timescaledb*\" -f dump_" + section + ".dump"
-		ex := exec.Command("bash", "-c", cmd)
+		ex := exec.Command("sh", "-c", cmd)
 		output, err := ex.Output()
 		if err != nil {
 			return err
@@ -58,7 +58,7 @@ func (l *Lib) migrateSchema(section string, skipDump bool) error {
 	}
 
 	cmd := "pg_restore -d " + l.targetPsqlConnStr + " --no-owner -j " + strconv.Itoa(l.libConfig.NumWorkers) + " -Fc -v dump_" + section + ".dump"
-	ex := exec.Command("bash", "-c", cmd)
+	ex := exec.Command("sh", "-c", cmd)
 	output, err := ex.Output()
 	if err != nil {
 		exitErr, ok := err.(*exec.ExitError)
